@@ -54,7 +54,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.Andy-Shao</groupId>
-            <artifactId>Gear</artifactId>
+            <artifactId>GearEE</artifactId>
             <version>4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
