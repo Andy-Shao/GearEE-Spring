@@ -3,10 +3,10 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.Andy-Shao</groupId>
-    <artifactId>GearEE</artifactId>
+    <artifactId>GearEE-Spring</artifactId>
     <version>4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>GearEE</name>
+    <name>GearEE-Spring</name>
     <description>Enhance and formating the coding of JDK</description>
     <url>https://github.com/Andy-Shao/GearEE</url>
     <inceptionYear>2016</inceptionYear>
