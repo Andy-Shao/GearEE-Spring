@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+    <bean name="indexPage" class="gear.web.control.IndexControl"></bean>
+    <bean name="mappingFactory" class="com.github.andyshaox.servlet.mapping.annotation.AnnotationMappingFactory">
+        <property name="classes">
+            <array value-type="java.lang.Class">
+                <bean factory-bean="indexPage" factory-method="getClass"></bean>
+            </array>
+        </property>
+    </bean>
+    
+    <bean name="findingMappingEngine" class="com.github.andyshaox.servlet.mapping.GenericFindingMappingEngine"></bean>
+    <bean name="findingMapping" class="com.github.andyshaox.servlet.mapping.GenericFindingMapping"
+        p:findingMappingEngine-ref="findingMappingEngine"></bean>
+        
+    <bean name="genericMappingProcess" class="com.github.andyshaox.servlet.mapping.GenericMappingProcess"></bean>
+    <bean name="baseMappingProcess" class="com.github.andyshaox.servlet.mapping.BasePathMappingProcessProxy">
+        <constructor-arg ref="genericMappingProcess"></constructor-arg>
+    </bean>
+    <bean name="mappingProcess" class="com.github.andyshaox.servlet.mapping.FindingProcessObject"
+        p:mappingProcess-ref="baseMappingProcess">
+        <property name="processObjects">
+            <array>
+                <ref bean="indexPage"/>
+            </array>
+        </property>
+    </bean>
+    
+    <bean name="mainServlet" class="com.github.andyshaox.servlet.mapping.ServletModel"
+        p:findingMapping-ref="findingMapping"
+        p:mappingProcess-ref="mappingProcess">
+        <constructor-arg index="0" ref="mappingFactory"></constructor-arg>
+    </bean>
+</beans>
