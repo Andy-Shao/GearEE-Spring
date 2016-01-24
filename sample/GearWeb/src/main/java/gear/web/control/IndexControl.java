@@ -7,7 +7,7 @@ import com.github.andyshaox.servlet.mapping.annotation.Mapping;
 public class IndexControl {
 
     public View doPost(){
-        return View.defaultView("/index");
+        return View.defaultView("/index.html");
     }
     
     public View doGet(){
