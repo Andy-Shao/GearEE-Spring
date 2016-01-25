@@ -17,13 +17,12 @@
     </bean>
     
     <bean name="findingMappingEngine" class="com.github.andyshaox.servlet.mapping.GenericFindingMappingEngine"></bean>
-    <bean name="genericFindingMapping" class="com.github.andyshaox.servlet.mapping.GenericFindingMapping"
+    <bean name="findingMapping" class="com.github.andyshaox.servlet.mapping.GenericFindingMapping"
         p:findingMappingEngine-ref="findingMappingEngine"></bean>
-    <bean name="findingMapping" class="com.github.andyshaox.servlet.mapping.WelcomePageFindingMapping"
-        p:target-ref="genericFindingMapping"></bean>   
         
     <bean name="genericMappingProcess" class="com.github.andyshaox.servlet.mapping.GenericMappingProcess"></bean>
-    <bean name="baseMappingProcess" class="com.github.andyshaox.servlet.mapping.BasePathMappingProcessProxy">
+    <bean name="baseMappingProcess" class="com.github.andyshaox.servlet.mapping.BasePathMappingProcessProxy"
+        p:basePath="/view">
         <constructor-arg ref="genericMappingProcess"></constructor-arg>
     </bean>
     <bean name="mappingProcess" class="com.github.andyshaox.servlet.mapping.FindingProcessObject"
@@ -33,11 +32,5 @@
                 <ref bean="indexPage"/>
             </array>
         </property>
-    </bean>
-    
-    <bean name="mainServlet" class="com.github.andyshaox.servlet.mapping.ServletModel"
-        p:findingMapping-ref="findingMapping"
-        p:mappingProcess-ref="mappingProcess">
-        <constructor-arg index="0" ref="mappingFactory"></constructor-arg>
     </bean>
 </beans>

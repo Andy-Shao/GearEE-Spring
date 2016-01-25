@@ -1,5 +1,6 @@
 package gear.web.control;
 
+import com.github.andyshaox.servlet.mapping.PageView;
 import com.github.andyshaox.servlet.mapping.View;
 import com.github.andyshaox.servlet.mapping.annotation.Mapping;
 
@@ -7,7 +8,7 @@ import com.github.andyshaox.servlet.mapping.annotation.Mapping;
 public class IndexControl {
 
     public View doPost(){
-        return View.defaultView("/index.html");
+        return new PageView("/index");
     }
     
     public View doGet(){
