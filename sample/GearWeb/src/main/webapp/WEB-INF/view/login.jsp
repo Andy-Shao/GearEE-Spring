@@ -9,7 +9,14 @@
 </head>
 <body>
 <center>
-    <h1>WORDS MEMORY SYSTEM</h1>
+<h1>Login Page</h1>
+<form action="<%=request.getContextPath()%>/login/process.html" method="post">
+<label>Username:</label>
+<input type="text" name="username"/><br/>
+<label>Password:</label>
+<input type="password" name="password"/><br/>
+<input type="submit"/>
+</form>
 </center>
 </body>
 </html>

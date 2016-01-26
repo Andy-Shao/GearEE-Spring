@@ -8,10 +8,12 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-4.2.xsd">
     <bean name="indexPage" class="gear.web.control.IndexControl"></bean>
+    <bean name="loginControl" class="gear.web.control.LoginControl"></bean>
     <bean name="mappingFactory" class="com.github.andyshaox.servlet.mapping.annotation.AnnotationMappingFactory">
         <property name="classes">
             <array value-type="java.lang.Class">
                 <bean factory-bean="indexPage" factory-method="getClass"></bean>
+                <bean factory-bean="loginControl" factory-method="getClass"></bean>
             </array>
         </property>
     </bean>
@@ -26,18 +28,27 @@
     <bean name="baseMappingProcess" class="com.github.andyshaox.servlet.mapping.BasePathMappingProcessProxy">
         <constructor-arg ref="genericMappingProcess"></constructor-arg>
     </bean>
+    <bean name="bindingParameter" class="com.github.andyshaox.servlet.mapping.BindingParameter"
+        p:mappingProcess-ref="baseMappingProcess"></bean>
     <bean name="mappingProcess" class="com.github.andyshaox.servlet.mapping.FindingProcessObject"
-        p:mappingProcess-ref="baseMappingProcess">
+        p:mappingProcess-ref="bindingParameter">
         <property name="processObjects">
             <array>
                 <ref bean="indexPage"/>
+                <ref bean="loginControl"/>
             </array>
         </property>
     </bean>
     
+    <!-- 
     <bean name="mainServlet" class="com.github.andyshaox.servlet.mapping.ServletModel"
         p:findingMapping-ref="findingMapping"
         p:mappingProcess-ref="mappingProcess">
         <constructor-arg index="0" ref="mappingFactory"></constructor-arg>
     </bean>
+     -->
+    <bean name="mainServlet" class="gear.web.control.TestServlet"
+        p:mappingFactory-ref="mappingFactory"
+        p:findingMapping-ref="findingMapping"
+        p:mappingProcess-ref="mappingProcess"></bean> 
 </beans>
