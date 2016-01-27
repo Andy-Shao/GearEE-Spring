@@ -42,6 +42,7 @@ public class TestServlet extends HttpServlet {
         LOG.info(req.getContextPath());
         LOG.info(req.getRequestURI());
         LOG.info(req.getRequestURL());
+        LOG.info(req.getMethod());
         Bitree<Mapping> bitree = Bitree.defaultBitTree();
         this.mappingFactory.buildMappingMap(bitree);
         LOG.info("======Building Mapping=========");
