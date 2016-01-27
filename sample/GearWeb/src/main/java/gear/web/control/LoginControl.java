@@ -27,6 +27,7 @@ public class LoginControl {
         if (username.trim().equals("andyshao") && password.trim().equals("andyshao")){
             view.addInjection(LoginControl.ALLOW_LOGIN , true , VariableLevel.SESSION);
             view.addInjection(USER_NAME, username, VariableLevel.SESSION);
+            view.addInjection("username" , username);
             view.setResource("/index");
         }
         return view;

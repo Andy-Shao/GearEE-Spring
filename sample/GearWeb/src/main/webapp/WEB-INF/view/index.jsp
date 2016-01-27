@@ -11,7 +11,6 @@
 <body>
 <center>
 <h1>WORDS MEMORY SYSTEM</h1>
-<p>Welcoming in WMS <%=session.getAttribute(LoginControl.USER_NAME) %></p>
 </center>
 </body>
 </html>
