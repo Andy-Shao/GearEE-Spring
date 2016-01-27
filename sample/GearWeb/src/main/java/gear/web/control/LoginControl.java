@@ -19,9 +19,8 @@ public class LoginControl {
 
     @Mapping("/process")
     public View process(@Variable(required = false) String username , @Variable(required = false) String password) {
-        PageView view = new PageView();
+        PageView view = new PageView("/login");
         if (username == null || password == null){
-            view.setResource("/login");
             view.addInjection(NOTIFICATION , "username or password is null");
             return view;
         }

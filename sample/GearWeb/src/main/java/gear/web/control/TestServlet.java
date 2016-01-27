@@ -1,9 +1,6 @@
 package gear.web.control;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.github.andyshao.data.structure.Bitree;
-import com.github.andyshao.reflect.MethodOperation;
 import com.github.andyshaox.servlet.mapping.FindingMapping;
 import com.github.andyshaox.servlet.mapping.Mapping;
 import com.github.andyshaox.servlet.mapping.MappingFactory;
@@ -42,14 +38,7 @@ public class TestServlet extends HttpServlet {
             TestServlet.LOG.info(mapping);
         });
         TestServlet.LOG.info("======Finding Mapping=========");
-        //        Mapping mapping = this.findingMapping.search(this.getServletConfig() , req , resp , bitree);
-        Mapping mapping = null;
-        final List<Mapping> list = new ArrayList<>();
-        Bitree.postorder(bitree.root() , (mp) -> {
-            if(mp.getProcessMethod().equals(MethodOperation.getMethod(LoginControl.class , "process" , String.class, String.class)))
-                list.add(mp);
-        });
-        mapping = list.get(0);
+        Mapping mapping = this.findingMapping.search(this.getServletConfig() , req , resp , bitree);
         TestServlet.LOG.info(mapping);
         TestServlet.LOG.info("======Mapping Process=========");
         View view = this.mappingProcess.doProcess(this.getServletConfig() , req , resp , mapping , new ProcessType());
