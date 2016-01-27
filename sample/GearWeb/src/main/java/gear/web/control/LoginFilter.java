@@ -15,7 +15,7 @@ import com.github.andyshao.util.ObjectOperation;
 
 public class LoginFilter implements Filter {
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void destroy() {
     }
 
     @Override
@@ -23,18 +23,15 @@ public class LoginFilter implements Filter {
         throws IOException , ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         String url = StringOperation.replaceFirst(req.getRequestURI() , req.getContextPath() , "");
-        if (url.equals("/login.html") || url.equals("/login/process.html")) {
-            chain.doFilter(request , response);
-            return;
-        }
         boolean isAllow =
             (Boolean) ObjectOperation.valueOrNull(req.getSession().getAttribute(LoginControl.ALLOW_LOGIN) , false);
-        if (isAllow) chain.doFilter(request , response);
+        if (url.equals("/login.html") || url.equals("/login/process.html") || isAllow)
+            chain.doFilter(request , response);
         else req.getRequestDispatcher("/login.html").forward(request , response);
     }
 
     @Override
-    public void destroy() {
+    public void init(FilterConfig filterConfig) throws ServletException {
     }
 
 }
