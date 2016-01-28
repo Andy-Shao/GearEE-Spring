@@ -7,11 +7,11 @@ import com.github.andyshaox.servlet.mapping.annotation.Mapping;
 @Mapping("/index")
 public class IndexControl {
 
-    public View doPost(){
-        return new PageView("/index");
-    }
-    
-    public View doGet(){
+    public View doGet() {
         return this.doPost();
+    }
+
+    public View doPost() {
+        return new PageView("/index");
     }
 }
