@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -42,6 +44,8 @@ public class GenericFindingMappingEngineTest {
         
         List<Mapping> list = new ArrayList<>();
         this.findingMappingEngine.search(config , request , response , bitree , list);
-        System.out.println(list);
+        Assert.assertThat(list.size() , Matchers.greaterThan(0));
+        Mapping firstOne = list.get(0);
+        Assert.assertThat(firstOne.getUrl() , Matchers.is("/process"));
     }
 }
