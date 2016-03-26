@@ -1,8 +1,16 @@
 package com.github.andyshaox.spring.jdbc;
 
 import java.lang.reflect.Method;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+
+import com.github.andyshao.reflect.ClassOperation;
 import com.github.andyshaox.jdbc.Dao;
+import com.github.andyshaox.jdbc.JdbcReturnConvert;
 import com.github.andyshaox.jdbc.Sql;
 import com.github.andyshaox.jdbc.SqlExecution;
 
@@ -17,18 +25,37 @@ import com.github.andyshaox.jdbc.SqlExecution;
  *
  */
 public class SpringJdbcSqlExecution implements SqlExecution {
+    private JdbcTemplate jdbcTemplate;
+
     @Override
     public Object invoke(Dao dao , Method processMethod , String executableSql , Object... args) {
         Object result = null;
         Sql sql = dao.getSqls().get(processMethod);
-        switch(sql.getSqlType()){
+        switch (sql.getSqlType()) {
+        case UPDATE:
+            this.jdbcTemplate.update(executableSql);
+            break;
         case EXECUTION:
-            //TODO
+            this.jdbcTemplate.execute(executableSql);
             break;
         case QUERY:
-            //TODO
+            result = this.jdbcTemplate.query(executableSql , new ResultSetExtractor<Object>() {
+                @Override
+                public Object extractData(ResultSet rs) throws SQLException , DataAccessException {
+                    @SuppressWarnings("rawtypes")
+                    final Class<? extends JdbcReturnConvert> retConvertor = sql.getRetConvertor();
+                    if(!retConvertor.equals(JdbcReturnConvert.class)){
+                        JdbcReturnConvert<?> jrc = ClassOperation.newInstance(retConvertor);
+                        return jrc.convert(rs);
+                    } else return JdbcReturnConvert.genericReturnConvert(processMethod.getReturnType(), rs);
+                }
+            });
             break;
         }
         return result;
+    }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 }
