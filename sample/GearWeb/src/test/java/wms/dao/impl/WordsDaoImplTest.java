@@ -1,0 +1,28 @@
+package wms.dao.impl;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.github.andyshaox.jdbc.DaoDetector;
+
+import wms.dao.WordsDao;
+import wms.domain.Words;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({ "classpath:conf/spring/databases/datasources/mariadbArg.xml" ,
+    "classpath:conf/spring/databases/datasources/dataSource.xml" , "classpath:conf/spring/dao/mariadbDao.xml" })
+public class WordsDaoImplTest {
+    @Autowired
+    private DaoDetector daoDetector;
+
+    @Test
+    public void showFirstLine() {
+        WordsDao dao = this.daoDetector.finding(WordsDao.class);
+        Words words = dao.showFirstLine();
+        Assert.assertTrue(words != null);
+    }
+}

@@ -42,12 +42,14 @@ public class SpringJdbcSqlExecution implements SqlExecution {
             result = this.jdbcTemplate.query(executableSql , new ResultSetExtractor<Object>() {
                 @Override
                 public Object extractData(ResultSet rs) throws SQLException , DataAccessException {
-                    @SuppressWarnings("rawtypes")
-                    final Class<? extends JdbcReturnConvert> retConvertor = sql.getRetConvertor();
-                    if(!retConvertor.equals(JdbcReturnConvert.class)){
-                        JdbcReturnConvert<?> jrc = ClassOperation.newInstance(retConvertor);
-                        return jrc.convert(rs);
-                    } else return JdbcReturnConvert.genericReturnConvert(processMethod.getReturnType(), rs);
+                    if(rs.next()){
+                        @SuppressWarnings("rawtypes")
+                        final Class<? extends JdbcReturnConvert> retConvertor = sql.getRetConvertor();
+                        if(!retConvertor.equals(JdbcReturnConvert.class)){
+                            JdbcReturnConvert<?> jrc = ClassOperation.newInstance(retConvertor);
+                            return jrc.convert(rs);
+                        } else return JdbcReturnConvert.genericReturnConvert(processMethod.getReturnType(), rs);
+                    } else return null;
                 }
             });
             break;
