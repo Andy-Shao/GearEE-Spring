@@ -22,7 +22,7 @@ public class WordsDaoImplTest {
     @Test
     public void showFirstLine() {
         WordsDao dao = this.daoDetector.finding(WordsDao.class);
-        Words words = dao.showFirstLine();
+        Words words = dao.find("test");
         Assert.assertTrue(words != null);
     }
 }
