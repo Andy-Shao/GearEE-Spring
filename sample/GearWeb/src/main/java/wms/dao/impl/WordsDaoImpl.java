@@ -12,7 +12,6 @@ import com.github.andyshaox.jdbc.SqlType;
 import com.github.andyshaox.jdbc.annotation.Dao;
 import com.github.andyshaox.jdbc.annotation.Sql;
 
-import gear.web.valueobject.WordsListConvert;
 import wms.dao.WordsDao;
 import wms.domain.Words;
 
@@ -26,7 +25,7 @@ import wms.domain.Words;
  * @author Andy.Shao
  *
  */
-@Dao(dataBase = "Mariadb")
+@Dao(dataBase = "Mariadb" , domain = Words.class)
 public interface WordsDaoImpl extends WordsDao {
     static class MySqlAssembly implements SqlAssembly {
         private static Properties properties;
@@ -66,7 +65,7 @@ public interface WordsDaoImpl extends WordsDao {
     public long findTimeLesNum(String nextTime);
 
     @Override
-    @Sql(value = "findTimeLessThan" , retConvertor = WordsListConvert.class)
+    @Sql(value = "findTimeLessThan" , sqlAssembly = MySqlAssembly.class)
     public List<Words> findTimeLessThan(String nextTime , long size);
 
     @Override

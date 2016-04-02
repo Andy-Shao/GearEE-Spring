@@ -48,7 +48,7 @@ public class SpringJdbcSqlExecution implements SqlExecution {
                         if(!retConvertor.equals(JdbcReturnConvert.class)){
                             JdbcReturnConvert<?> jrc = ClassOperation.newInstance(retConvertor);
                             return jrc.convert(rs);
-                        } else return JdbcReturnConvert.genericReturnConvert(processMethod.getReturnType(), rs);
+                        } else return JdbcReturnConvert.genericReturnConvert(dao, processMethod, rs);
                     } else return null;
                 }
             });
