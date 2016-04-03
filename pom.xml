@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     <name>GearEE-Spring</name>
     <description>Enhance and formating the coding of JDK</description>
-    <url>https://github.com/Andy-Shao/GearEE</url>
+    <url>https://github.com/Andy-Shao/GearEE-Spring</url>
     <inceptionYear>2016</inceptionYear>
     <licenses>
         <license>
