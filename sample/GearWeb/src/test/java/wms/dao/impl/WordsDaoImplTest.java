@@ -1,5 +1,6 @@
 package wms.dao.impl;
 
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,5 +25,6 @@ public class WordsDaoImplTest {
         WordsDao dao = this.daoDetector.finding(WordsDao.class);
         Words words = dao.find("test");
         Assert.assertTrue(words != null);
+        Assert.assertThat(words.getWordName() , Matchers.is("test"));
     }
 }

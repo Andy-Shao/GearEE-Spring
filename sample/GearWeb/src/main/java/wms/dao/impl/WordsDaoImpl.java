@@ -3,12 +3,11 @@ package wms.dao.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Properties;
 
+import com.github.andyshao.reflect.annotation.Param;
 import com.github.andyshaox.jdbc.JdbcProcessException;
 import com.github.andyshaox.jdbc.SqlAssembly;
-import com.github.andyshaox.jdbc.SqlType;
 import com.github.andyshaox.jdbc.annotation.Dao;
 import com.github.andyshaox.jdbc.annotation.Sql;
 
@@ -48,33 +47,21 @@ public interface WordsDaoImpl extends WordsDao {
 
     }
 
-    @Override
-    @Sql(
-        value = "INSERT INTO words(id,word_name,insert_time) VALUES('{words.id}','{words.wordName}','{words.insertTime}')" ,
-        sqlType = SqlType.UPDATE)
-    public void add(Words words);
+    //    @Override
+    //    @Sql(
+    //        value = "INSERT INTO words(id,word_name,insert_time) VALUES('{words.id}','{words.wordName}','{words.insertTime}')" ,
+    //        sqlType = SqlType.UPDATE)
+    //    public void add(Words words);
 
     @Override
     @Sql("SELECT id, word_name wordName, insert_time insertTime FROM words WHERE word_name='{wordName}'")
-    public Words find(String wordName);
+    public Words find(@Param("wordName") String wordName);
 
-    @Override
-    public long findTimeBigNum(String nextTime);
-
-    @Override
-    public long findTimeLesNum(String nextTime);
-
-    @Override
-    @Sql(value = "findTimeLessThan" , sqlAssembly = MySqlAssembly.class)
-    public List<Words> findTimeLessThan(String nextTime , long size);
-
-    @Override
-    @Sql("DELETE FROM words WHERE id = '{words.id}'")
-    public void remove(Words words);
-
-    @Override
-    public long totally();
-
-    @Override
-    public void update(Words words);
+    //    @Override
+    //    @Sql(value = "findTimeLessThan" , sqlAssembly = MySqlAssembly.class)
+    //    public List<Words> findTimeLessThan(String nextTime , long size);
+    //
+    //    @Override
+    //    @Sql("DELETE FROM words WHERE id = '{words.id}'")
+    //    public void remove(Words words);
 }
