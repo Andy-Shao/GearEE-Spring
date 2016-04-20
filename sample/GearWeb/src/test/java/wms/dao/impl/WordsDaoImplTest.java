@@ -1,5 +1,7 @@
 package wms.dao.impl;
 
+import java.io.IOException;
+
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,7 +23,7 @@ public class WordsDaoImplTest {
     private DaoDetector daoDetector;
 
     @Test
-    public void showFirstLine() {
+    public void getDaoTest() throws IOException {
         WordsDao dao = this.daoDetector.finding(WordsDao.class);
         Words words = dao.find("test");
         Assert.assertTrue(words != null);

@@ -1,21 +1,23 @@
 package wms.dao;
 
+import java.util.List;
+
 import wms.domain.Words;
 
 public interface WordsDao {
-    //    void add(Words words);
-    //
-    //    long findTimeBigNum(String nextTime);
-    //
-    //    long findTimeLesNum(String nextTime);
-    //
-    //    List<Words> findTimeLessThan(String nextTime , long size);
-    //
-    //    void remove(Words words);
-    //
-    //    long totally();
-    //
-    //    void update(Words words);
+    void add(Words words);
 
     Words find(String wordName);
+
+    long findTimeBigNum(String nextTime);
+
+    long findTimeLesNum(String nextTime);
+
+    List<Words> findTimeLessThan(String nextTime , long size);
+
+    void remove(Words words);
+
+    long totally();
+
+    void update(Words words);
 }
