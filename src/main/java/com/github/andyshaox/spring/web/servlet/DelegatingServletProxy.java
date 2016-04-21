@@ -30,8 +30,7 @@ public class DelegatingServletProxy extends GenericServlet {
     public void init() throws ServletException {
         super.init();
         this.targetBean = this.getServletName();
-        WebApplicationContext wac =
-            WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
+        WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
         this.proxy = (Servlet) wac.getBean(this.targetBean);
         this.proxy.init(this.getServletConfig());
     }

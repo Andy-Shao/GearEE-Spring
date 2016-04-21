@@ -35,10 +35,8 @@ public class WordsDaoDemo implements WordsDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Words> findTimeLessThan(String nextTime , long size) {
-        return (List<Words>) this.sqlExecution.invoke(this.dao ,
-            MethodOperation.getMethod(this.dao.getDefineClass() , "findTimeLessThan" ,
-                new Class<?>[] { String.class , long.class }) ,
-            null , new Object[] { nextTime , size });
+        return (List<Words>) this.sqlExecution.invoke(this.dao , MethodOperation.getMethod(this.dao.getDefineClass() , "findTimeLessThan" , new Class<?>[] { String.class , long.class }) , null ,
+            new Object[] { nextTime , size });
     }
 
     @Override

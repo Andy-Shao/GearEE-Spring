@@ -19,14 +19,11 @@ public class LoginFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request , ServletResponse response , FilterChain chain)
-        throws IOException , ServletException {
+    public void doFilter(ServletRequest request , ServletResponse response , FilterChain chain) throws IOException , ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         String url = StringOperation.replaceFirst(req.getRequestURI() , req.getContextPath() , "");
-        boolean isAllow =
-            (Boolean) ObjectOperation.valueOrNull(req.getSession().getAttribute(LoginControl.ALLOW_LOGIN) , false);
-        if (url.equals("/login.html") || url.equals("/login/process.html") || isAllow)
-            chain.doFilter(request , response);
+        boolean isAllow = (Boolean) ObjectOperation.valueOrNull(req.getSession().getAttribute(LoginControl.ALLOW_LOGIN) , false);
+        if (url.equals("/login.html") || url.equals("/login/process.html") || isAllow) chain.doFilter(request , response);
         else req.getRequestDispatcher("/login.html").forward(request , response);
     }
 

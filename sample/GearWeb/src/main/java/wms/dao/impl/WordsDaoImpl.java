@@ -32,8 +32,7 @@ public interface WordsDaoImpl extends WordsDao {
 
         static {
             MySqlAssembly.properties = new Properties();
-            try (InputStream inputStream = Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("wms/dao/impl/WordsDaoImpl.properties")) {
+            try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("wms/dao/impl/WordsDaoImpl.properties")) {
                 MySqlAssembly.properties.load(inputStream);
             } catch (IOException e) {
                 throw new JdbcProcessException(e);
@@ -61,7 +60,7 @@ public interface WordsDaoImpl extends WordsDao {
     @Override
     @Sql(value = "findTimeLessThan" , sqlAssembly = MySqlAssembly.class)
     public List<Words> findTimeLessThan(String nextTime , long size);
-    
+
     //    @Override
     //    @Sql("DELETE FROM words WHERE id = '{words.id}'")
     //    public void remove(Words words);

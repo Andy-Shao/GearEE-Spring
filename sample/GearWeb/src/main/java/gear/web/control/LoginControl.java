@@ -9,8 +9,8 @@ import com.github.andyshaox.servlet.mapping.annotation.Variable;
 @Mapping("/login")
 public class LoginControl {
     public static final String ALLOW_LOGIN = "allow_login";
-    public static final String USER_NAME = "user_name";
     public static final String NOTIFICATION = "notification";
+    public static final String USER_NAME = "user_name";
 
     @Mapping
     public String login() {
@@ -20,13 +20,13 @@ public class LoginControl {
     @Mapping("/process")
     public View process(@Variable(required = false) String username , @Variable(required = false) String password) {
         PageView view = new PageView("/login");
-        if (username == null || password == null){
-            view.addInjection(NOTIFICATION , "username or password is null");
+        if (username == null || password == null) {
+            view.addInjection(LoginControl.NOTIFICATION , "username or password is null");
             return view;
         }
-        if (username.trim().equals("andyshao") && password.trim().equals("andyshao")){
+        if (username.trim().equals("andyshao") && password.trim().equals("andyshao")) {
             view.addInjection(LoginControl.ALLOW_LOGIN , true , VariableLevel.SESSION);
-            view.addInjection(USER_NAME, username, VariableLevel.SESSION);
+            view.addInjection(LoginControl.USER_NAME , username , VariableLevel.SESSION);
             view.addInjection("username" , username);
             view.setResource("/index");
         }

@@ -14,8 +14,8 @@ public class WordsDetail implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof WordsDetail) {
             WordsDetail that = (WordsDetail) obj;
-            return Objects.equals(this.wordId , that.wordId) && Objects.equals(this.wordType , that.wordType)
-                && Objects.equals(this.explaining , that.explaining) && Objects.equals(this.mnemonic , that.mnemonic);
+            return Objects.equals(this.wordId , that.wordId) && Objects.equals(this.wordType , that.wordType) && Objects.equals(this.explaining , that.explaining)
+                && Objects.equals(this.mnemonic , that.mnemonic);
         } else return false;
     }
 
@@ -58,7 +58,6 @@ public class WordsDetail implements Serializable {
 
     @Override
     public String toString() {
-        return "WordsDetail [wordId=" + this.wordId + ", wordType=" + this.wordType + ", explaining=" + this.explaining
-            + ", mnemonic=" + this.mnemonic + "]";
+        return "WordsDetail [wordId=" + this.wordId + ", wordType=" + this.wordType + ", explaining=" + this.explaining + ", mnemonic=" + this.mnemonic + "]";
     }
 }

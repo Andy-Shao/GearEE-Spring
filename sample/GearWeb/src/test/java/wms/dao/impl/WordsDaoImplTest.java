@@ -16,8 +16,7 @@ import wms.dao.WordsDao;
 import wms.domain.Words;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:conf/spring/databases/datasources/mariadbArg.xml" ,
-    "classpath:conf/spring/databases/datasources/dataSource.xml" , "classpath:conf/spring/dao/mariadbDao.xml" })
+@ContextConfiguration({ "classpath:conf/spring/databases/datasources/mariadbArg.xml" , "classpath:conf/spring/databases/datasources/dataSource.xml" , "classpath:conf/spring/dao/mariadbDao.xml" })
 public class WordsDaoImplTest {
     @Autowired
     private DaoDetector daoDetector;

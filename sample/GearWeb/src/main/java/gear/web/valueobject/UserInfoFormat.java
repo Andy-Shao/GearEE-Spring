@@ -16,9 +16,7 @@ import gear.web.control.LoginControl;
 public class UserInfoFormat implements ParameterFormat {
 
     @Override
-    public Object covert(
-        ServletConfig config , HttpServletRequest request , HttpServletResponse response , Variable variable ,
-        Class<?> valueType) throws ServletException , IOException {
+    public Object covert(ServletConfig config , HttpServletRequest request , HttpServletResponse response , Variable variable , Class<?> valueType) throws ServletException , IOException {
         UserInfo userInfo = new UserInfo();
         HttpSession session = request.getSession();
         userInfo.setUsername(session.getAttribute(LoginControl.USER_NAME).toString());

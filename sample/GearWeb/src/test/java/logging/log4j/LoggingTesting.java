@@ -10,8 +10,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration("classpath:logging/log4j/applicationContext.xml")
 public class LoggingTesting {
     private static final Logger LOG = Logger.getLogger(LoggingTesting.class);
+
     @Test
-    public void test(){
-        LOG.info("MY TESTING");
+    public void test() {
+        LoggingTesting.LOG.info("MY TESTING");
     }
 }

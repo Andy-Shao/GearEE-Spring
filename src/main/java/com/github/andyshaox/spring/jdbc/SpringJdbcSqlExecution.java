@@ -42,13 +42,13 @@ public class SpringJdbcSqlExecution implements SqlExecution {
             result = this.jdbcTemplate.query(executableSql , new ResultSetExtractor<Object>() {
                 @Override
                 public Object extractData(ResultSet rs) throws SQLException , DataAccessException {
-                    if(rs.next()){
+                    if (rs.next()) {
                         @SuppressWarnings("rawtypes")
                         final Class<? extends JdbcReturnConvert> retConvertor = sql.getRetConvertor();
-                        if(!retConvertor.equals(JdbcReturnConvert.class)){
+                        if (!retConvertor.equals(JdbcReturnConvert.class)) {
                             JdbcReturnConvert<?> jrc = ClassOperation.newInstance(retConvertor);
                             return jrc.convert(rs);
-                        } else return JdbcReturnConvert.genericReturnConvert(dao, processMethod, rs);
+                        } else return JdbcReturnConvert.genericReturnConvert(dao , processMethod , rs);
                     } else return null;
                 }
             });

@@ -13,8 +13,7 @@ public class Words implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof Words) {
             Words that = (Words) obj;
-            return Objects.equals(this.id , that.id) && Objects.equals(this.insertTime , that.insertTime)
-                && Objects.equals(this.wordName , that.wordName);
+            return Objects.equals(this.id , that.id) && Objects.equals(this.insertTime , that.insertTime) && Objects.equals(this.wordName , that.wordName);
         } else return false;
     }
 

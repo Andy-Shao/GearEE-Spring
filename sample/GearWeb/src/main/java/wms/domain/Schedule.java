@@ -15,8 +15,7 @@ public class Schedule implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof Schedule) {
             Schedule that = (Schedule) obj;
-            return Objects.equals(this.id , that.id) && Objects.equals(this.nextTime , that.nextTime)
-                && Objects.equals(this.step , that.step) && Objects.equals(this.updateTime , that.updateTime)
+            return Objects.equals(this.id , that.id) && Objects.equals(this.nextTime , that.nextTime) && Objects.equals(this.step , that.step) && Objects.equals(this.updateTime , that.updateTime)
                 && Objects.equals(this.wordId , that.wordId);
         } else return false;
     }
@@ -68,7 +67,6 @@ public class Schedule implements Serializable {
 
     @Override
     public String toString() {
-        return "Schedule [id=" + this.id + ", nextTime=" + this.nextTime + ", step=" + this.step + ", updateTime="
-            + this.updateTime + ", wordId=" + this.wordId + "]";
+        return "Schedule [id=" + this.id + ", nextTime=" + this.nextTime + ", step=" + this.step + ", updateTime=" + this.updateTime + ", wordId=" + this.wordId + "]";
     }
 }

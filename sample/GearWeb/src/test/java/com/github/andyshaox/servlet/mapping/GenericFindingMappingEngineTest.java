@@ -30,7 +30,7 @@ public class GenericFindingMappingEngineTest {
     }
 
     @Test
-    public void test() throws ServletException, IOException {
+    public void test() throws ServletException , IOException {
         Bitree<Mapping> bitree = Bitree.defaultBitTree();
         AnnotationMappingFactory factory = new AnnotationMappingFactory();
         factory.setClasses(new Class<?>[] { IndexControl.class , LoginControl.class });
@@ -41,7 +41,7 @@ public class GenericFindingMappingEngineTest {
         Mockito.when(request.getMethod()).thenReturn("POST");
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
         ServletConfig config = Mockito.mock(ServletConfig.class);
-        
+
         List<Mapping> list = new ArrayList<>();
         this.findingMappingEngine.search(config , request , response , bitree , list);
         Assert.assertThat(list.size() , Matchers.greaterThan(0));
