@@ -3,6 +3,7 @@ package wms.dao.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Properties;
 
 import com.github.andyshao.reflect.annotation.Param;
@@ -57,10 +58,10 @@ public interface WordsDaoImpl extends WordsDao {
     @Sql("SELECT id, word_name wordName, insert_time insertTime FROM words WHERE word_name='{wordName}'")
     public Words find(@Param("wordName") String wordName);
 
-    //    @Override
-    //    @Sql(value = "findTimeLessThan" , sqlAssembly = MySqlAssembly.class)
-    //    public List<Words> findTimeLessThan(String nextTime , long size);
-    //
+    @Override
+    @Sql(value = "findTimeLessThan" , sqlAssembly = MySqlAssembly.class)
+    public List<Words> findTimeLessThan(String nextTime , long size);
+    
     //    @Override
     //    @Sql("DELETE FROM words WHERE id = '{words.id}'")
     //    public void remove(Words words);

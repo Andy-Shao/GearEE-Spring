@@ -1,6 +1,7 @@
 package com.github.andyshaox.spring.jdbc;
 
 import com.github.andyshaox.jdbc.DaoDetector;
+import com.github.andyshaox.jdbc.DaoDetectorCach;
 import com.github.andyshaox.jdbc.FindSql;
 import com.github.andyshaox.jdbc.GenericDaoFactory;
 import com.github.andyshaox.jdbc.LoadingArgs;
@@ -14,18 +15,19 @@ import com.github.andyshaox.jdbc.annotation.AnnotationDaoDetector;
  * Descript:<br>
  * Copyright: Copryright(c) Apr 1, 2016<br>
  * Encoding:UNIX UTF-8
+ * 
  * @author Andy.Shao
  *
  */
 public class SpringAnnotationDaoDetector implements DaoDetector {
-    private AnnotationDaoDetector annotationDaoDetector;
+    private DaoDetector daoDetector;
     private String dbName = null;
     private String[] packageRegexes;
     private SqlExecution sqlExecution;
 
     @Override
     public <T> T finding(Class<T> clazz) {
-        return this.annotationDaoDetector.finding(clazz);
+        return this.daoDetector.finding(clazz);
     }
 
     public void init() {
@@ -39,9 +41,13 @@ public class SpringAnnotationDaoDetector implements DaoDetector {
         sqlExcution.setExcution(this.sqlExecution);
         GenericDaoFactory daoFactory = new GenericDaoFactory();
         daoFactory.setSqlExecution(sqlExcution);
-        if (this.dbName == null) this.annotationDaoDetector = new AnnotationDaoDetector(this.packageRegexes);
-        else this.annotationDaoDetector = new AnnotationDaoDetector(this.packageRegexes , this.dbName);
-        this.annotationDaoDetector.setDaoFactory(daoFactory);
+        AnnotationDaoDetector annotationDaoDetector = null;
+        if (this.dbName == null) annotationDaoDetector = new AnnotationDaoDetector(this.packageRegexes);
+        else annotationDaoDetector = new AnnotationDaoDetector(this.packageRegexes , this.dbName);
+        annotationDaoDetector.setDaoFactory(daoFactory);
+        DaoDetectorCach daoDetectorCach = new DaoDetectorCach();
+        daoDetectorCach.setDaoDetector(annotationDaoDetector);
+        this.daoDetector = daoDetectorCach;
     }
 
     public void setDbName(String dbName) {
