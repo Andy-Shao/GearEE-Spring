@@ -9,13 +9,21 @@ public interface WordsDao {
 
     Words find(String wordName);
 
+    List<Words> findInfoByLess(String nextTime , long start , long length);
+
     long findTimeBigNum(String nextTime);
 
     long findTimeLesNum(String nextTime);
 
-    List<Words> findTimeLessThan(String nextTime , long size);
+    default List<Words> findTimeLessThan(String nextTime , long size){
+        return this.findInfoByLess(nextTime , 0 , size);
+    }
 
-    void remove(Words words);
+    void remove(String wordsId);
+
+    default void remove(Words words) {
+        this.remove(words.getId());
+    }
 
     long totally();
 

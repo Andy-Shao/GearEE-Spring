@@ -51,4 +51,13 @@ public class WordsDaoDemo implements WordsDao {
     @Override
     public void update(Words words) {
     }
+
+    @Override
+    public void remove(String wordsId) {
+    }
+
+    @Override
+    public List<Words> findInfoByLess(String nextTime , long start , long length) {
+        return null;
+    }
 }

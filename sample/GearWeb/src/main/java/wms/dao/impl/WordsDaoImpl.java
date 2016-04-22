@@ -9,6 +9,7 @@ import java.util.Properties;
 import com.github.andyshao.reflect.annotation.Param;
 import com.github.andyshaox.jdbc.JdbcProcessException;
 import com.github.andyshaox.jdbc.SqlAssembly;
+import com.github.andyshaox.jdbc.SqlType;
 import com.github.andyshaox.jdbc.annotation.Dao;
 import com.github.andyshaox.jdbc.annotation.Sql;
 
@@ -47,21 +48,19 @@ public interface WordsDaoImpl extends WordsDao {
 
     }
 
-    //    @Override
-    //    @Sql(
-    //        value = "INSERT INTO words(id,word_name,insert_time) VALUES('{words.id}','{words.wordName}','{words.insertTime}')" ,
-    //        sqlType = SqlType.UPDATE)
-    //    public void add(Words words);
+    @Override
+    @Sql(value = "INSERT INTO words(id,word_name,insert_time) VALUES('{words.id}','{words.wordName}','{words.insertTime}')" , sqlType = SqlType.UPDATE)
+    public void add(@Param("words") Words words);
 
     @Override
     @Sql("SELECT id, word_name wordName, insert_time insertTime FROM words WHERE word_name='{wordName}'")
     public Words find(@Param("wordName") String wordName);
 
     @Override
-    @Sql(value = "findTimeLessThan" , sqlAssembly = MySqlAssembly.class)
-    public List<Words> findTimeLessThan(String nextTime , long size);
+    @Sql(value = "findInfoByLess" , sqlAssembly = MySqlAssembly.class)
+    public List<Words> findInfoByLess(@Param("nextTime") String nextTime , @Param("start") long start , @Param("length") long length);
 
-    //    @Override
-    //    @Sql("DELETE FROM words WHERE id = '{words.id}'")
-    //    public void remove(Words words);
+    @Override
+    @Sql(value = "DELETE FROM words WHERE id = '{wordsId}'" , sqlType = SqlType.UPDATE)
+    public void remove(@Param("wordsId") String wordsId);
 }
