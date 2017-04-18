@@ -49,7 +49,7 @@ public class RedisDistributionLock implements DistributionLock {
     }
 
     private void addExpireTime(RedisConnection conn , ExpireMode expireMode , int expireTimes) {
-        if(expireTimes < 0) return;
+        if(expireTimes <= 0) return;
         //设置锁的使用超时时间
         switch (expireMode) {
         case SECONDS:
