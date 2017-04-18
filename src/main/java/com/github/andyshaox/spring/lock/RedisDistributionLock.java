@@ -1,6 +1,8 @@
 package com.github.andyshaox.spring.lock;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -24,7 +26,37 @@ public class RedisDistributionLock implements DistributionLock {
     private final byte[] lockKey;
     private final int sleepTime;
     private final TimeUnit sleepTimeUnit;
-
+    private final RedisDistributionLock.LockOwer lockOwer = this.new LockOwer();
+    
+    private class LockOwer {
+        private volatile Thread thread;
+        private volatile AtomicLong size;
+        
+        public synchronized boolean increment() {
+            if(thread == null) {
+                this.thread = Thread.currentThread();
+                this.size = new AtomicLong(0L);
+                return false;
+            } else {
+                this.size.incrementAndGet();
+                return true;
+            }
+        }
+        
+        public synchronized boolean decrement() {
+            if(Objects.equals(Thread.currentThread() , this.thread)) {
+                if(this.size.longValue() <= 1L) {
+                    this.thread = null;
+                    this.size = null;
+                    return false;
+                } else {
+                    this.size.decrementAndGet();
+                    return true;
+                }
+            } else return true;
+        }
+    }
+    
     public RedisDistributionLock(RedisConnectionFactory connFactory) {
         this(connFactory , RedisDistributionLock.DEFAULT_KEY);
     }
@@ -112,7 +144,9 @@ public class RedisDistributionLock implements DistributionLock {
     }
 
     private boolean tryAcquireLock(RedisConnection conn) {
-        return conn.setNX(this.lockKey , this.lockKey);
+        Boolean result = conn.setNX(this.lockKey , this.lockKey);
+        if(result) this.lockOwer.increment();
+        return result;
     }
 
     @Override
@@ -135,12 +169,14 @@ public class RedisDistributionLock implements DistributionLock {
 
     @Override
     public void unlock() {
-        RedisConnection conn = null;
-        try {
-            conn = this.connFactory.getConnection();
-            conn.del(this.lockKey);
-        } finally {
-            if (conn != null) conn.close();
+        if(!this.lockOwer.decrement()) {
+            RedisConnection conn = null;
+            try {
+                conn = this.connFactory.getConnection();
+                conn.del(this.lockKey);
+            } finally {
+                if (conn != null) conn.close();
+            }
         }
     }
 }
