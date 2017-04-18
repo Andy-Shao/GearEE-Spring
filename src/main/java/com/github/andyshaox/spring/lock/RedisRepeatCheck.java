@@ -28,7 +28,7 @@ public class RedisRepeatCheck implements RepeatCheck {
     }
 
     @Override
-    public boolean check(String uniqueKey , ExpireMode mode , int times) {
+    public boolean isRepeat(String uniqueKey , ExpireMode mode , int times) {
         boolean result = false;
         RedisConnection conn = null;
         try {
@@ -42,8 +42,8 @@ public class RedisRepeatCheck implements RepeatCheck {
     }
 
     @Override
-    public boolean check(String uniqueKey) {
-        return this.check(uniqueKey, ExpireMode.SECONDS, 5 * 60);
+    public boolean isRepeat(String uniqueKey) {
+        return this.isRepeat(uniqueKey, ExpireMode.SECONDS, 5 * 60);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class RedisRepeatCheck implements RepeatCheck {
     }
     
     private boolean isRepeat(RedisConnection conn, String key) {
-        return conn.setNX(md5Key(key), md5Key(key));
+        return !conn.setNX(md5Key(key), md5Key(key));
     }
     
     private boolean setExpire(RedisConnection conn, String key, ExpireMode mode, int times) {
