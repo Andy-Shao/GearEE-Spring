@@ -58,7 +58,7 @@ public class RedisRepeatCheck implements RepeatCheck {
             
             @Override
             public boolean tryLock(ExpireMode expireMode , int expireTimes) {
-                return this.proxied.tryLock(mode , times);
+                return this.proxied.tryLock(expireMode , expireTimes);
             }
             
             @Override
