@@ -49,6 +49,7 @@ public class RedisDistributionLock implements DistributionLock {
     }
 
     private void addExpireTime(RedisConnection conn , ExpireMode expireMode , int expireTimes) {
+        if(expireTimes < 0) return;
         //设置锁的使用超时时间
         switch (expireMode) {
         case SECONDS:
@@ -85,7 +86,7 @@ public class RedisDistributionLock implements DistributionLock {
 
     @Override
     public void lockInterruptibly() throws InterruptedException {
-        this.lockInterruptibly(ExpireMode.IGNORE , 1000);
+        this.lockInterruptibly(ExpireMode.IGNORE , -1);
     }
 
     @Override
@@ -116,7 +117,7 @@ public class RedisDistributionLock implements DistributionLock {
 
     @Override
     public boolean tryLock() {
-        return this.tryLock(ExpireMode.IGNORE , 1000);
+        return this.tryLock(ExpireMode.IGNORE , -1);
     }
 
     @Override
