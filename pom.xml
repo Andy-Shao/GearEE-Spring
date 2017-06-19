@@ -26,9 +26,9 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:https://github.com/Andy-Shao/GearEE.git</connection>
-        <developerConnection>scm:git:https://github.com/Andy-Shao/GearEE.git</developerConnection>
-        <url>https://github.com/Andy-Shao/GearEE.git</url>
+        <connection>scm:git:https://github.com/Andy-Shao/GearEE-Spring.git</connection>
+        <developerConnection>scm:git:https://github.com/Andy-Shao/GearEE-Spring.git</developerConnection>
+        <url>https://github.com/Andy-Shao/GearEE-Spring.git</url>
     </scm>
     <issueManagement>
         <system>jira</system>
