@@ -1,5 +1,6 @@
 package com.github.andyshaox.spring.lock;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -31,6 +32,15 @@ public class RedisDistributionLock implements DistributionLock {
     private class LockOwer {
         private volatile Thread thread;
         private volatile AtomicLong size;
+        private volatile long timeSign = 0;
+        
+        public void setTimeSign(long timeSign) {
+			this.timeSign = timeSign;
+		}
+
+		public synchronized boolean isOwner() {
+        		return Objects.equals(this.thread, Thread.currentThread());
+        }
         
         public synchronized boolean increment() {
             if(thread == null) {
@@ -43,17 +53,21 @@ public class RedisDistributionLock implements DistributionLock {
             }
         }
         
-        public synchronized boolean decrement() {
-            if(Objects.equals(Thread.currentThread() , this.thread)) {
+        public synchronized boolean canUnlock() {
+        		if(this.timeSign >= new Date().getTime()) {
+        			this.thread = null;
+        			this.size = null;
+        			return false;
+        		} else if(Objects.equals(Thread.currentThread() , this.thread)) {
                 if(this.size.longValue() <= 1L) {
                     this.thread = null;
                     this.size = null;
-                    return false;
+                    return true;
                 } else {
                     this.size.decrementAndGet();
-                    return true;
+                    return false;
                 }
-            } else return true;
+            } else return false;
         }
     }
     
@@ -105,7 +119,7 @@ public class RedisDistributionLock implements DistributionLock {
         RedisConnection conn = null;
         try {
             conn = this.connFactory.getConnection();
-            while (!this.tryAcquireLock(conn))
+            while (!this.tryAcquireLock(conn, expireMode, expireTimes))
                 try {
                     this.sleep();
                 } catch (InterruptedException e) {
@@ -130,7 +144,7 @@ public class RedisDistributionLock implements DistributionLock {
             //间隔一段时间获取锁，直到获取
             while (!isGet) {
                 if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-                isGet = this.tryAcquireLock(conn);
+                isGet = this.tryAcquireLock(conn, expireMode, expireTimes);
                 this.sleep();
             }
             this.addExpireTime(conn , expireMode , expireTimes);
@@ -143,9 +157,26 @@ public class RedisDistributionLock implements DistributionLock {
         this.sleepTimeUnit.sleep(this.sleepTime);
     }
 
-    private boolean tryAcquireLock(RedisConnection conn) {
+    private boolean tryAcquireLock(RedisConnection conn, ExpireMode expireMode, int expireTimes) {
+    		if(this.lockOwer.isOwner()) return this.lockOwer.increment();
+    		long l = new Date().getTime();
+    		switch(expireMode) {
+    		case MILISECONDS:
+    			l = l + expireTimes;
+    			break;
+    		case SECONDS:
+    			l = l + (expireTimes * 1000);
+    			break;
+    			
+    		case IGNORE:
+    		default :
+    			break;
+    		}
         Boolean result = conn.setNX(this.lockKey , this.lockKey);
-        if(result) this.lockOwer.increment();
+        if(result) {
+			this.lockOwer.setTimeSign(l);
+        		this.lockOwer.increment();
+        }
         return result;
     }
 
@@ -159,8 +190,8 @@ public class RedisDistributionLock implements DistributionLock {
         RedisConnection conn = null;
         try {
             conn = this.connFactory.getConnection();
-            boolean result = this.tryAcquireLock(conn);
-            this.addExpireTime(conn , expireMode , expireTimes);
+            boolean result = this.tryAcquireLock(conn, expireMode, expireTimes);
+            this.addExpireTime(conn, expireMode, expireTimes);
             return result;
         } finally {
             if (conn != null) conn.close();
@@ -169,7 +200,7 @@ public class RedisDistributionLock implements DistributionLock {
 
     @Override
     public void unlock() {
-        if(!this.lockOwer.decrement()) {
+        if(this.lockOwer.canUnlock()) {
             RedisConnection conn = null;
             try {
                 conn = this.connFactory.getConnection();
