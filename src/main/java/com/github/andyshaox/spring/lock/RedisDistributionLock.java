@@ -54,7 +54,7 @@ public class RedisDistributionLock implements DistributionLock {
         }
         
         public synchronized boolean canUnlock() {
-        		if(this.timeSign >= new Date().getTime()) {
+        		if(this.timeSign <= new Date().getTime()) {
         			this.thread = null;
         			this.size = null;
         			return false;
