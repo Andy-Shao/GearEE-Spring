@@ -35,11 +35,11 @@ public class RedisDistributionLock implements DistributionLock {
         private volatile long timeSign = 0;
         
         public void setTimeSign(long timeSign) {
-			this.timeSign = timeSign;
-		}
+            this.timeSign = timeSign;
+        }
 
-		public synchronized boolean isOwner() {
-        		return Objects.equals(this.thread, Thread.currentThread());
+        public synchronized boolean isOwner() {
+                return Objects.equals(this.thread, Thread.currentThread());
         }
         
         public synchronized boolean increment() {
@@ -54,12 +54,12 @@ public class RedisDistributionLock implements DistributionLock {
         }
         
         public synchronized boolean canUnlock() {
-        		if(this.timeSign <= new Date().getTime()) {
-        			this.thread = null;
-        			this.size = null;
-        			return false;
-        		} else if(Objects.equals(Thread.currentThread() , this.thread)) {
-                if(this.size.longValue() <= 1L) {
+                if(this.timeSign <= new Date().getTime()) {
+                    this.thread = null;
+                    this.size = null;
+                    return false;
+                } else if(Objects.equals(Thread.currentThread() , this.thread)) {
+                if(this.size.longValue() <= 0L) {
                     this.thread = null;
                     this.size = null;
                     return true;
@@ -111,7 +111,7 @@ public class RedisDistributionLock implements DistributionLock {
 
     @Override
     public void lock() {
-        this.lock(ExpireMode.IGNORE , 1000);
+        this.lock(ExpireMode.IGNORE , -1);
     }
 
     @Override
@@ -158,24 +158,28 @@ public class RedisDistributionLock implements DistributionLock {
     }
 
     private boolean tryAcquireLock(RedisConnection conn, ExpireMode expireMode, int expireTimes) {
-    		if(this.lockOwer.isOwner()) return this.lockOwer.increment();
-    		long l = new Date().getTime();
-    		switch(expireMode) {
-    		case MILISECONDS:
-    			l = l + expireTimes;
-    			break;
-    		case SECONDS:
-    			l = l + (expireTimes * 1000);
-    			break;
-    			
-    		case IGNORE:
-    		default :
-    			break;
-    		}
+        long l = new Date().getTime();
+        switch(expireMode) {
+        case MILISECONDS:
+            l = l + expireTimes;
+            break;
+        case SECONDS:
+            l = l + (expireTimes * 1000);
+            break;
+                
+        case IGNORE:
+            l = Long.MAX_VALUE;
+        default :
+            break;
+        }
+        if(this.lockOwer.isOwner()) {
+            this.lockOwer.setTimeSign(l);
+            return this.lockOwer.increment();
+        }
         Boolean result = conn.setNX(this.lockKey , this.lockKey);
         if(result) {
-			this.lockOwer.setTimeSign(l);
-        		this.lockOwer.increment();
+            this.lockOwer.setTimeSign(l);
+            this.lockOwer.increment();
         }
         return result;
     }
